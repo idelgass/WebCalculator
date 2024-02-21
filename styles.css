@@ -1,0 +1,65 @@
+/* Standin to fill page */
+html, body {
+  height: 100%;
+  width: 100%;
+}
+body {
+  display: table;
+  margin: 0;
+}
+.calculator{
+  flex: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.calculator *{
+  flex: 1;
+}
+.display{
+  background-color: black;
+  color: green;
+  display: flex;
+  justify-content: right;
+  align-items: flex-end;
+}
+.keyset{
+  flex: 4;
+  display: flex;
+}
+.numpad{
+  background-color: grey;
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+}
+.numpad__row{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+#numpad__rowspec{
+  background-color: lightgrey;
+}
+.opad{
+  background-color: orange;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.opad__row{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.key{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* .opad__row0{}
+.opad__row1{}
+.opad__row2{}
+.opad__row3{} */
