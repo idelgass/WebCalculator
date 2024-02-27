@@ -9,6 +9,7 @@ function createNumKeysClos(){
   //let workingVal = 0;
   let decimalDigit = 1;
   let decimal = false;
+  let lastDeletable = null;
 
   const idValueMaps = {
     "key-one": 1,
@@ -31,8 +32,11 @@ function createNumKeysClos(){
       workingVal = 0;
       decimal = false;
       decimalDigit = 1;
+      lastDeletable = null;
     }
     else if(id == "key-delete"){
+      // TODO: USE lastDeletable AND SUBTRACT/SET DECIMAL MODE, CAN BE NUMBER OR .
+      // Remember to adjust decimalDigit
       if(workingVal >= 0){
         if(decimal){
           let decimalPart = (workingVal - Math.floor(workingVal)) * Math.pow(10, decimalDigit);
@@ -47,12 +51,14 @@ function createNumKeysClos(){
       if(decimalDigit == 1){}
     }
     else if(id == "key-point"){
+      lastDeletable = id;
       decimal = true;
     }
     else if(id == "key-sign"){
       workingVal *= -1;
     }
     else{
+      lastDeletable = id;
       if(decimal){
         workingVal += buttonIn * Math.pow(10, -1 * decimalDigit);
         decimalDigit++;
