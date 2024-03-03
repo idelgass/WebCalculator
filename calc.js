@@ -86,7 +86,7 @@ function createNumKeysClos(){
         }
         break;
     }
-    
+
     // Update display
     // This is intended as temporary, will need to replace
     document.getElementById('display_box').textContent = workingVal;
@@ -98,8 +98,31 @@ function createNumKeysClos(){
   return handleNumKeys;
 }
 
-function handleOpKeys(){
+function handleOpKeys(id){
+  console.log(id);
+  // TODO: Consider creating an operation dict like I did for numkeys and wrapping
+  // plus/minus and multiply/divide together into fewer cases
+  switch(id){
+    // TODO: Equals key needs to know what the last operation was
+    // key order: 2, +, 2, only display 4 when = is punched
 
+    // TODO: only update working total when next op key has been pressed. impossible
+    // to determine when a user has finished entering a number so we must wait until
+    // they hit = or a new operation. However, remember order of operations, hitting plus after
+    // hitting * should not resolve the * but instead start a new chain. What data structure to use?
+    case "key-equals":
+      break;
+    case "key-plus":
+      break;
+    case "key-minus":
+      break;
+    case "key-multiply":
+      break;
+    case "key-divide":
+      break;
+    default:
+
+  }
 }
 
 const numKeys = document.querySelectorAll(".numpad > * > .key > button");
@@ -107,5 +130,12 @@ const handleNumKeysClosed = createNumKeysClos();
 numKeys.forEach((button) => {
   button.addEventListener("click", () => {
     handleNumKeysClosed(button.parentNode.id)
+  });
+});
+
+const opKeys = document.querySelectorAll(".opad > * > .key > button");
+opKeys.forEach((button) => {
+  button.addEventListener("click", () =>{
+    handleOpKeys(button.parentNode.id);
   });
 });
