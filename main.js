@@ -1,5 +1,18 @@
+// import Node from "./modules/tree.mjs";
+class Node {
+  var value;
+  var left;
+  var right
+  constructor(value) {
+    this.value = value;
+    left = null;
+    right = null;
+  }
+}
+
 // Global, everything will need to access this
 var workingVal = 0;
+var workingTotal = 0;
 
 // Encapsulates the let stmts below so the values will persist across consecutive
 // calls to handleNumKeys without need of global vars
@@ -98,6 +111,11 @@ function createNumKeysClos(){
   return handleNumKeys;
 }
 
+/* PSUEDOCODE
+
+
+
+*/
 function handleOpKeys(id){
   console.log(id);
   // TODO: Consider creating an operation dict like I did for numkeys and wrapping
@@ -106,10 +124,7 @@ function handleOpKeys(id){
     // TODO: Equals key needs to know what the last operation was
     // key order: 2, +, 2, only display 4 when = is punched
 
-    // TODO: only update working total when next op key has been pressed. impossible
-    // to determine when a user has finished entering a number so we must wait until
-    // they hit = or a new operation. However, remember order of operations, hitting plus after
-    // hitting * should not resolve the * but instead start a new chain. What data structure to use?
+    // Will use binary tree to represent entered expression
     case "key-equals":
       break;
     case "key-plus":
