@@ -1,5 +1,9 @@
 // import Node from "./modules/tree.mjs";
+// TODO: Move tree stuff to its own module, need to actually host for this cant
+// access es modules thru file// protocol
+// TODO: Also,
 class Node {
+  // Do I need to declare like this?
   var value;
   var left;
   var right
@@ -7,6 +11,16 @@ class Node {
     this.value = value;
     left = null;
     right = null;
+  }
+}
+class Tree{
+  var root;
+  constructor(value){
+    this.root = null
+  }
+
+  insert(){
+
   }
 }
 
@@ -125,6 +139,10 @@ function handleOpKeys(id){
     // key order: 2, +, 2, only display 4 when = is punched
 
     // Will use binary tree to represent entered expression
+
+    // NOTE: workingval will always go on the LEFT, right will either be an operator
+    // or another value. If right node is a value, we can return and display the total,
+    // resetting the tree.
     case "key-equals":
       break;
     case "key-plus":
