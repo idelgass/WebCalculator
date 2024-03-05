@@ -1,28 +1,3 @@
-// import Node from "./modules/tree.mjs";
-// TODO: Move tree stuff to its own module, need to actually host for this cant
-// access es modules thru file// protocol
-// TODO: Also,
-class Node {
-  // Do I need to declare like this?
-  var value;
-  var left;
-  var right
-  constructor(value) {
-    this.value = value;
-    left = null;
-    right = null;
-  }
-}
-class Tree{
-  var root;
-  constructor(value){
-    this.root = null
-  }
-
-  insert(){
-
-  }
-}
 
 // Global, everything will need to access this
 var workingVal = 0;
@@ -31,7 +6,7 @@ var workingTotal = 0;
 // Encapsulates the let stmts below so the values will persist across consecutive
 // calls to handleNumKeys without need of global vars
 function createNumKeysClos(){
-  let workingVal = 0;
+  //let workingVal = 0;
   let decimalDigit = 0;
   let intDigit = 0;
   let decimal = false;
@@ -125,11 +100,27 @@ function createNumKeysClos(){
   return handleNumKeys;
 }
 
-/* PSUEDOCODE
+// import Node from "./modules/tree.mjs";
+// TODO: Move tree stuff to its own module, need to actually host for this cant
+// access es modules thru file// protocol
 
+// Object constructor
+function Node(value){
+  this.value = value;
+  this.left = null;
+  this.right = null;
+}
+class ExpTree{
+  constructor(){
+    this.root = null
+  }
+}
 
+const tree = new ExpTree();
+console.log(tree);
 
-*/
+let currentNode = null;
+
 function handleOpKeys(id){
   console.log(id);
   // TODO: Consider creating an operation dict like I did for numkeys and wrapping
@@ -146,6 +137,15 @@ function handleOpKeys(id){
     case "key-equals":
       break;
     case "key-plus":
+      if(tree.root == null){
+        tree.root = new Node(id);
+        tree.root.left = workingVal; // Should actually be working total I think
+        currentNode = tree.root.right;
+        console.log(tree);
+      }
+      else{
+
+      }
       break;
     case "key-minus":
       break;
