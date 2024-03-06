@@ -26,6 +26,9 @@ function createNumKeysClos(){
   };
 
   function handleNumKeys(id){
+    if(workingVal == 0){
+      intDigit = 0;
+    }
     console.log(id);
     switch(id){
       // Clear display and all working value data.
@@ -159,11 +162,16 @@ console.log("res: " + resolveExpTree(testTree.root))
 var tree = new ExpTree();
 console.log(tree);
 var currentNode = null;
+var reset = false;
 // Need to be able to access intDigit from here to reset it
 // Need to add some sort of run on flag for after equals is pressed. If a number
 // entry is started then workingTotal shoudl be reset. If an operation is pressed
 // then old working total should be preserved
 function handleOpKeys(id){
+  if(reset){
+    workingTotal = 0;
+    reset = false;
+  }
   console.log(id);
   // TODO: Consider creating an operation dict like I did for numkeys and wrapping
   // plus/minus and multiply/divide together into fewer cases
@@ -180,7 +188,7 @@ function handleOpKeys(id){
       currentNode.right = new Node(workingVal);
       workingTotal = resolveExpTree(tree.root);
       console.log("Equals: " + workingTotal);
-      workingTotal = 0;
+      reset = true;
       tree.root = null;
       break;
     case "key-plus":
@@ -195,7 +203,7 @@ function handleOpKeys(id){
         //currentNode = tree.root.right;
       }
       else{
-        if(currentNode.value == "key-plus" || currentNode.value == "key-minus"){
+        // if(currentNode.value == "key-plus" || currentNode.value == "key-minus"){
           currentNode.right = new Node(workingVal);
           console.log(tree.root);
           workingTotal = resolveExpTree(tree.root);
@@ -204,10 +212,13 @@ function handleOpKeys(id){
           tree.root.left = new Node(workingTotal);
           currentNode = tree.root;
           console.log(tree.root);
-        }
-        else{
-
-        }
+        // }
+        // else{
+        //   console.log("branched");
+        //   currentNode.right = new Node(id);
+        //   currentNode = currentNode.right;
+        //   currentNode.left = new Node(workingVal);
+        // }
       }
       console.log("workingTotal: " + workingTotal)
       break;
@@ -225,14 +236,22 @@ function handleOpKeys(id){
         //currentNode = tree.root.right;
       }
       else{
-        currentNode.right = new Node(workingVal);
-        console.log(tree.root);
-        workingTotal = resolveExpTree(tree.root);
-        // Duplicate block, could I move after the else?
-        tree.root = new Node(id);
-        tree.root.left = new Node(workingTotal);
-        currentNode = tree.root;
-        console.log(tree.root);
+        if(currentNode.value != "key-plus" && currentNode.value != "key-minus"){
+          currentNode.right = new Node(workingVal);
+          console.log(tree.root);
+          workingTotal = resolveExpTree(tree.root);
+          // Duplicate block, could I move after the else?
+          tree.root = new Node(id);
+          tree.root.left = new Node(workingTotal);
+          currentNode = tree.root;
+          console.log(tree.root);
+        }
+        else{
+          console.log("branched");
+          currentNode.right = new Node(id);
+          currentNode = currentNode.right;
+          currentNode.left = new Node(workingVal);
+        }
       }
       break;
     default:
@@ -240,6 +259,8 @@ function handleOpKeys(id){
   }
   // TODO:
   // Display workingTotal
+  if (workingTotal == 0) document.getElementById('display_box').textContent = workingVal;
+  else document.getElementById('display_box').textContent = workingTotal;
   workingVal = 0;
 }
 
