@@ -2,6 +2,7 @@
 // Global, everything will need to access this
 var workingVal = 0;
 var workingTotal = 0;
+//var intDigit = 0;
 
 // Encapsulates the let stmts below so the values will persist across consecutive
 // calls to handleNumKeys without need of global vars
@@ -36,9 +37,31 @@ function createNumKeysClos(){
         decimalDigit = 0;
         intDigit = 0;
         break;
+      case "key-one":
+      case "key-two":
+      case "key-three":
+      case "key-four":
+      case "key-five":
+      case "key-six":
+      case "key-seven":
+      case "key-eight":
+      case "key-nine":
+      case "key-zero":
+        let buttonIn = idValueMaps[id];
+        if(decimal){
+          workingVal += buttonIn * Math.pow(10, -1 * (decimalDigit + 1));
+          decimalDigit++;
+        }
+        else{
+          workingVal *= 10;
+          workingVal += buttonIn;
+          intDigit++;
+        }
+        break;
       // Delete trailing number, not including extra decimal values from
       // fp rounding errors. Didn't want to convert to string but no convenient
       // way to get last digit of fp number mathematically.
+      // NOTE: CANT ALLOW DELETION WHEN NUMBER IS RESULT OF AN EQUALS DISPLAY
       case "key-delete":
         let numString = workingVal.toString();
 
@@ -72,20 +95,6 @@ function createNumKeysClos(){
         break;
       case "key-sign":
         workingVal *= -1;
-        break;
-      // Shouldn't rlly be default case so errors can be caught, but stringing
-      // together cases 1-9 would be ugly
-      default:
-        let buttonIn = idValueMaps[id];
-        if(decimal){
-          workingVal += buttonIn * Math.pow(10, -1 * (decimalDigit + 1));
-          decimalDigit++;
-        }
-        else{
-          workingVal *= 10;
-          workingVal += buttonIn;
-          intDigit++;
-        }
         break;
     }
 
@@ -151,19 +160,22 @@ var tree = new ExpTree();
 console.log(tree);
 var currentNode = null;
 // Need to be able to access intDigit from here to reset it
+// Need to add some sort of run on flag for after equals is pressed. If a number
+// entry is started then workingTotal shoudl be reset. If an operation is pressed
+// then old working total should be preserved
 function handleOpKeys(id){
   console.log(id);
   // TODO: Consider creating an operation dict like I did for numkeys and wrapping
   // plus/minus and multiply/divide together into fewer cases
   switch(id){
-    // TODO: Equals key needs to know what the last operation was
-    // key order: 2, +, 2, only display 4 when = is punched
 
     // Will use binary tree to represent entered expression
 
     // NOTE: workingval will always go on the LEFT, right will either be an operator
     // or another value. If right node is an operator of equal priority or =,
     // we can return and display the total, resetting the tree.
+    // NOTE: CANT ALLOW EQUALS VALUES TO BE BACKSPACED, NEED TO SET A READONLY flag
+    // HERE UNTIL NUMBER ENTRY STARTS AGAIN
     case "key-equals":
       currentNode.right = new Node(workingVal);
       workingTotal = resolveExpTree(tree.root);
@@ -172,6 +184,9 @@ function handleOpKeys(id){
       tree.root = null;
       break;
     case "key-plus":
+    case "key-minus":
+      // Duplicate block as mentioned in the else below, maybe should put at the end
+      // and just include a != null guard here
       if(tree.root == null){
         tree.root = new Node(id);
         tree.root.left = new Node(workingVal);
@@ -196,11 +211,29 @@ function handleOpKeys(id){
       }
       console.log("workingTotal: " + workingTotal)
       break;
-    case "key-minus":
-      break;
+    // case "key-minus":
+    //   break;
     case "key-multiply":
-      break;
     case "key-divide":
+      // Duplicate block as mentioned in the else below, maybe should put at the end
+      // and just include a != null guard here
+      if(tree.root == null){
+        tree.root = new Node(id);
+        tree.root.left = new Node(workingVal);
+        currentNode = tree.root;
+        console.log(tree.root);
+        //currentNode = tree.root.right;
+      }
+      else{
+        currentNode.right = new Node(workingVal);
+        console.log(tree.root);
+        workingTotal = resolveExpTree(tree.root);
+        // Duplicate block, could I move after the else?
+        tree.root = new Node(id);
+        tree.root.left = new Node(workingTotal);
+        currentNode = tree.root;
+        console.log(tree.root);
+      }
       break;
     default:
 
