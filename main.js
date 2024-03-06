@@ -259,8 +259,7 @@ function handleOpKeys(id){
   }
   // TODO:
   // Display workingTotal
-  if (workingTotal == 0) document.getElementById('display_box').textContent = workingVal;
-  else document.getElementById('display_box').textContent = workingTotal;
+  document.getElementById('display_box').textContent = workingTotal;
   workingVal = 0;
 }
 
