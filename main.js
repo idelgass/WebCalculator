@@ -105,6 +105,7 @@ function createNumKeysClos(){
 // access es modules thru file// protocol
 
 // Object constructor
+
 function Node(value){
   this.value = value;
   this.left = null;
@@ -116,11 +117,40 @@ class ExpTree{
   }
 }
 
-const tree = new ExpTree();
+function resolveExpTree(node){
+  if(node == null){
+    return 0;
+  }
+  if (node.left == null && node.right == null) {
+    return node.value;
+  }
+
+  const left = resolveExpTree(node.left);
+  const right = resolveExpTree(node.right);
+
+  switch (node.value) {
+    case "key-plus":
+      return left + right;
+    case "key-minus":
+      return left - right;
+    case "key-multiply":
+      return left * right;
+    case "key-divide":
+      return left / right;
+    default:
+      throw new Error('Invalid operator: ' + node.value);
+  }
+}
+var testTree = new ExpTree();
+testTree.root = new Node("key-plus");
+testTree.root.left = new Node(1);
+testTree.root.right = new Node(2);
+console.log("res: " + resolveExpTree(testTree.root))
+
+var tree = new ExpTree();
 console.log(tree);
-
-let currentNode = null;
-
+var currentNode = null;
+// Need to be able to access intDigit from here to reset it
 function handleOpKeys(id){
   console.log(id);
   // TODO: Consider creating an operation dict like I did for numkeys and wrapping
@@ -132,20 +162,39 @@ function handleOpKeys(id){
     // Will use binary tree to represent entered expression
 
     // NOTE: workingval will always go on the LEFT, right will either be an operator
-    // or another value. If right node is a value, we can return and display the total,
-    // resetting the tree.
+    // or another value. If right node is an operator of equal priority or =,
+    // we can return and display the total, resetting the tree.
     case "key-equals":
+      currentNode.right = new Node(workingVal);
+      workingTotal = resolveExpTree(tree.root);
+      console.log("Equals: " + workingTotal);
+      workingTotal = 0;
+      tree.root = null;
       break;
     case "key-plus":
       if(tree.root == null){
         tree.root = new Node(id);
-        tree.root.left = workingVal; // Should actually be working total I think
-        currentNode = tree.root.right;
-        console.log(tree);
+        tree.root.left = new Node(workingVal);
+        currentNode = tree.root;
+        console.log(tree.root);
+        //currentNode = tree.root.right;
       }
       else{
+        if(currentNode.value == "key-plus" || currentNode.value == "key-minus"){
+          currentNode.right = new Node(workingVal);
+          console.log(tree.root);
+          workingTotal = resolveExpTree(tree.root);
+          // Duplicate block, could I move after the else?
+          tree.root = new Node(id);
+          tree.root.left = new Node(workingTotal);
+          currentNode = tree.root;
+          console.log(tree.root);
+        }
+        else{
 
+        }
       }
+      console.log("workingTotal: " + workingTotal)
       break;
     case "key-minus":
       break;
@@ -156,6 +205,9 @@ function handleOpKeys(id){
     default:
 
   }
+  // TODO:
+  // Display workingTotal
+  workingVal = 0;
 }
 
 const numKeys = document.querySelectorAll(".numpad > * > .key > button");
