@@ -36,9 +36,11 @@ function createNumKeysClos(){
       // (e.g. pressing clear after + should cancel the operation).
       case "key-clear":
         workingVal = 0;
+        workingTotal = 0;
         decimal = false;
         decimalDigit = 0;
         intDigit = 0;
+        tree.root = null;
         break;
       case "key-one":
       case "key-two":
@@ -153,11 +155,6 @@ function resolveExpTree(node){
       throw new Error('Invalid operator: ' + node.value);
   }
 }
-var testTree = new ExpTree();
-testTree.root = new Node("key-plus");
-testTree.root.left = new Node(1);
-testTree.root.right = new Node(2);
-console.log("res: " + resolveExpTree(testTree.root))
 
 var tree = new ExpTree();
 console.log(tree);
@@ -168,10 +165,10 @@ var reset = false;
 // entry is started then workingTotal shoudl be reset. If an operation is pressed
 // then old working total should be preserved
 function handleOpKeys(id){
-  if(reset){
-    workingTotal = 0;
-    reset = false;
-  }
+  // if(reset){
+  //   workingTotal = 0;
+  //   reset = false;
+  // }
   console.log(id);
   // TODO: Consider creating an operation dict like I did for numkeys and wrapping
   // plus/minus and multiply/divide together into fewer cases
