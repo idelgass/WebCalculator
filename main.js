@@ -40,7 +40,7 @@ function createNumKeysClos(){
         decimal = false;
         decimalDigit = 0;
         intDigit = 0;
-        tree.root = null;
+        tree.root = null; // Should get rid of this and add a clear case to handleOpKeys, clear should be both types of key
         break;
       case "key-one":
       case "key-two":
@@ -186,18 +186,25 @@ function handleOpKeys(id){
       workingTotal = resolveExpTree(tree.root);
       console.log("Equals: " + workingTotal);
       reset = true;
-      tree.root = null;
+      tree.root = new Node(id);
+      //tree.root.left = new Node(workingTotal);
       break;
     case "key-plus":
     case "key-minus":
       // Duplicate block as mentioned in the else below, maybe should put at the end
       // and just include a != null guard here
+      // Also this direct check to tree.root could be a check to currentNode I think
       if(tree.root == null){
         tree.root = new Node(id);
         tree.root.left = new Node(workingVal);
         currentNode = tree.root;
         console.log(tree.root);
         //currentNode = tree.root.right;
+      }
+      else if(tree.root.value == "key-equals"){
+        tree.root = new Node(id);
+        tree.root.left = new Node(workingTotal);
+        currentNode = tree.root;
       }
       else{
         // if(currentNode.value == "key-plus" || currentNode.value == "key-minus"){
@@ -209,18 +216,9 @@ function handleOpKeys(id){
           tree.root.left = new Node(workingTotal);
           currentNode = tree.root;
           console.log(tree.root);
-        // }
-        // else{
-        //   console.log("branched");
-        //   currentNode.right = new Node(id);
-        //   currentNode = currentNode.right;
-        //   currentNode.left = new Node(workingVal);
-        // }
       }
       console.log("workingTotal: " + workingTotal)
       break;
-    // case "key-minus":
-    //   break;
     case "key-multiply":
     case "key-divide":
       // Duplicate block as mentioned in the else below, maybe should put at the end
@@ -231,6 +229,11 @@ function handleOpKeys(id){
         currentNode = tree.root;
         console.log(tree.root);
         //currentNode = tree.root.right;
+      }
+      else if(tree.root.value == "key-equals"){
+        tree.root = new Node(id);
+        tree.root.left = new Node(workingTotal);
+        currentNode = tree.root;
       }
       else{
         if(currentNode.value != "key-plus" && currentNode.value != "key-minus"){
@@ -256,6 +259,8 @@ function handleOpKeys(id){
   }
   // TODO:
   // Display workingTotal
+  // Place a little flag check here to ensure 0 doesnt pop up after hitting an op the first time
+  // Flag should default to false, be set to true here after the display, and be reset to false upon hitting clear I think
   document.getElementById('display_box').textContent = workingTotal;
   workingVal = 0;
 }
