@@ -1,8 +1,7 @@
-
 // Global, everything will need to access this
 var workingVal = 0;
 var workingTotal = 0;
-//var intDigit = 0;
+var firstZeroFlag = false;
 
 // Encapsulates the let stmts below so the values will persist across consecutive
 // calls to handleNumKeys without need of global vars
@@ -40,6 +39,7 @@ function createNumKeysClos(){
         decimal = false;
         decimalDigit = 0;
         intDigit = 0;
+        firstZeroFlag = false;
         tree.root = null; // Should get rid of this and add a clear case to handleOpKeys, clear should be both types of key
         break;
       case "key-one":
@@ -181,6 +181,7 @@ function handleOpKeys(id){
     // we can return and display the total, resetting the tree.
     // NOTE: CANT ALLOW EQUALS VALUES TO BE BACKSPACED, NEED TO SET A READONLY flag
     // HERE UNTIL NUMBER ENTRY STARTS AGAIN
+    // BUG: = = gives result in display "key-equals"
     case "key-equals":
       currentNode.right = new Node(workingVal);
       workingTotal = resolveExpTree(tree.root);
@@ -261,7 +262,8 @@ function handleOpKeys(id){
   // Display workingTotal
   // Place a little flag check here to ensure 0 doesnt pop up after hitting an op the first time
   // Flag should default to false, be set to true here after the display, and be reset to false upon hitting clear I think
-  document.getElementById('display_box').textContent = workingTotal;
+  if(firstZeroFlag)document.getElementById('display_box').textContent = workingTotal;
+  firstZeroFlag = true;
   workingVal = 0;
 }
 
