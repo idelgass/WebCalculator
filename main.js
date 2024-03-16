@@ -2,6 +2,7 @@
 var workingVal = 0;
 var workingTotal = 0;
 var firstZeroFlag = false;
+var lastKeyEquals = false;
 
 // Encapsulates the let stmts below so the values will persist across consecutive
 // calls to handleNumKeys without need of global vars
@@ -28,6 +29,10 @@ function createNumKeysClos(){
     if(workingVal == 0){
       intDigit = 0;
     }
+    if(lastKeyEquals == true){
+      workingTotal = 0;
+    }
+    lastKeyEquals = false;
     console.log(id);
     switch(id){
       // Clear display and all working value data.
@@ -165,6 +170,7 @@ var reset = false;
 // entry is started then workingTotal shoudl be reset. If an operation is pressed
 // then old working total should be preserved
 function handleOpKeys(id){
+  lastKeyEquals = false;
   // if(reset){
   //   workingTotal = 0;
   //   reset = false;
@@ -188,6 +194,7 @@ function handleOpKeys(id){
       console.log("Equals: " + workingTotal);
       reset = true;
       tree.root = new Node(id);
+      lastKeyEquals = true;
       //tree.root.left = new Node(workingTotal);
       break;
     case "key-plus":
