@@ -3,6 +3,7 @@ var workingVal = 0;
 var workingTotal = 0;
 var firstZeroFlag = false;
 var lastKeyEquals = false;
+var resetTree = false;
 
 // Encapsulates the let stmts below so the values will persist across consecutive
 // calls to handleNumKeys without need of global vars
@@ -31,6 +32,7 @@ function createNumKeysClos(){
     }
     if(lastKeyEquals == true){
       workingTotal = 0;
+      resetTree = true, //check reset flag in handleop to reset tree
     }
     lastKeyEquals = false;
     console.log(id);
@@ -164,17 +166,17 @@ function resolveExpTree(node){
 var tree = new ExpTree();
 console.log(tree);
 var currentNode = null;
-var reset = false;
+// var reset = false;
 // Need to be able to access intDigit from here to reset it
 // Need to add some sort of run on flag for after equals is pressed. If a number
 // entry is started then workingTotal shoudl be reset. If an operation is pressed
 // then old working total should be preserved
 function handleOpKeys(id){
   lastKeyEquals = false;
-  // if(reset){
-  //   workingTotal = 0;
-  //   reset = false;
-  // }
+  if(resetTree){
+    tree.root = null;
+    resetTree = false;
+  }
   console.log(id);
   // TODO: Consider creating an operation dict like I did for numkeys and wrapping
   // plus/minus and multiply/divide together into fewer cases
