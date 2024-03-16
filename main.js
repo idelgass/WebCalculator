@@ -32,7 +32,7 @@ function createNumKeysClos(){
     }
     if(lastKeyEquals == true){
       workingTotal = 0;
-      resetTree = true, //check reset flag in handleop to reset tree
+      resetTree = true; //check reset flag in handleop to reset tree
     }
     lastKeyEquals = false;
     console.log(id);
