@@ -1,14 +1,55 @@
-// Global, everything will need to access this
+// TODO: Move tree stuff to its own module, need to actually host for this cant
+// access es modules thru file// protocol
+// Object constructor
+function Node(value){
+  this.value = value;
+  this.left = null;
+  this.right = null;
+}
+class ExpTree{
+  constructor(){
+    this.root = null
+  }
+}
+
+function resolveExpTree(node){
+  if(node == null){
+    return 0;
+  }
+  if (node.left == null && node.right == null) {
+    return node.value;
+  }
+
+  const left = resolveExpTree(node.left);
+  const right = resolveExpTree(node.right);
+
+  switch (node.value) {
+    case "key-plus":
+      return left + right;
+    case "key-minus":
+      return left - right;
+    case "key-multiply":
+      return left * right;
+    case "key-divide":
+      return left / right;
+    default:
+      throw new Error('Invalid operator: ' + node.value);
+  }
+}
+
+// import Node from "./modules/tree.mjs";
+
+// Globals
+// moved tree to globals until I encapsulate better
+var tree = new ExpTree();
 var workingVal = 0;
 var workingTotal = 0;
 var firstZeroFlag = false;
 var lastKeyEquals = false;
-var resetTree = false;
 
 // Encapsulates the let stmts below so the values will persist across consecutive
-// calls to handleNumKeys without need of global vars
+// calls to handleNumKeys without need of more globals
 function createNumKeysClos(){
-  //let workingVal = 0;
   let decimalDigit = 0;
   let intDigit = 0;
   let decimal = false;
@@ -32,7 +73,7 @@ function createNumKeysClos(){
     }
     if(lastKeyEquals == true){
       workingTotal = 0;
-      resetTree = true; //check reset flag in handleop to reset tree
+      tree.root = null; // Consider adding clear logic to operation keys so I dont have to expose this
     }
     lastKeyEquals = false;
     console.log(id);
@@ -47,7 +88,7 @@ function createNumKeysClos(){
         decimalDigit = 0;
         intDigit = 0;
         firstZeroFlag = false;
-        tree.root = null; // Should get rid of this and add a clear case to handleOpKeys, clear should be both types of key
+        tree.root = null; // Exposing tree.root again, dont like this
         break;
       case "key-one":
       case "key-two":
@@ -73,7 +114,7 @@ function createNumKeysClos(){
       // Delete trailing number, not including extra decimal values from
       // fp rounding errors. Didn't want to convert to string but no convenient
       // way to get last digit of fp number mathematically.
-      // NOTE: CANT ALLOW DELETION WHEN NUMBER IS RESULT OF AN EQUALS DISPLAY
+      // NOTE: CANT ALLOW DELETION WHEN NUMBER IS RESULT OF AN EQUALS DISPLAY, consider readOnly flag
       case "key-delete":
         let numString = workingVal.toString();
 
@@ -121,74 +162,18 @@ function createNumKeysClos(){
   return handleNumKeys;
 }
 
-// import Node from "./modules/tree.mjs";
-// TODO: Move tree stuff to its own module, need to actually host for this cant
-// access es modules thru file// protocol
-
-// Object constructor
-
-function Node(value){
-  this.value = value;
-  this.left = null;
-  this.right = null;
-}
-class ExpTree{
-  constructor(){
-    this.root = null
-  }
-}
-
-function resolveExpTree(node){
-  if(node == null){
-    return 0;
-  }
-  if (node.left == null && node.right == null) {
-    return node.value;
-  }
-
-  const left = resolveExpTree(node.left);
-  const right = resolveExpTree(node.right);
-
-  switch (node.value) {
-    case "key-plus":
-      return left + right;
-    case "key-minus":
-      return left - right;
-    case "key-multiply":
-      return left * right;
-    case "key-divide":
-      return left / right;
-    default:
-      throw new Error('Invalid operator: ' + node.value);
-  }
-}
-
-var tree = new ExpTree();
+// TODO: wrap these in a closure
 console.log(tree);
 var currentNode = null;
-// var reset = false;
-// Need to be able to access intDigit from here to reset it
-// Need to add some sort of run on flag for after equals is pressed. If a number
-// entry is started then workingTotal shoudl be reset. If an operation is pressed
-// then old working total should be preserved
 function handleOpKeys(id){
   lastKeyEquals = false;
-  if(resetTree){
-    tree.root = null;
-    resetTree = false;
-  }
   console.log(id);
   // TODO: Consider creating an operation dict like I did for numkeys and wrapping
   // plus/minus and multiply/divide together into fewer cases
   switch(id){
-
-    // Will use binary tree to represent entered expression
-
     // NOTE: workingval will always go on the LEFT, right will either be an operator
     // or another value. If right node is an operator of equal priority or =,
     // we can return and display the total, resetting the tree.
-    // NOTE: CANT ALLOW EQUALS VALUES TO BE BACKSPACED, NEED TO SET A READONLY flag
-    // HERE UNTIL NUMBER ENTRY STARTS AGAIN
     // BUG: = = gives result in display "key-equals"
     case "key-equals":
       currentNode.right = new Node(workingVal);
@@ -267,10 +252,7 @@ function handleOpKeys(id){
     default:
 
   }
-  // TODO:
   // Display workingTotal
-  // Place a little flag check here to ensure 0 doesnt pop up after hitting an op the first time
-  // Flag should default to false, be set to true here after the display, and be reset to false upon hitting clear I think
   if(firstZeroFlag)document.getElementById('display_box').textContent = workingTotal;
   firstZeroFlag = true;
   workingVal = 0;
