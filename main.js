@@ -182,7 +182,6 @@ function handleOpKeys(id){
     // NOTE: workingval will always go on the LEFT, right will either be an operator
     // or another value. If right node is an operator of equal priority or =,
     // we can return and display the total, resetting the tree.
-    // BUG: = = gives result in display "key-equals"
     case "key-equals":
       // non fatal
       // BUG: if no operation entered before = pressed then currentNode is null
