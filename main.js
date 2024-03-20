@@ -20,6 +20,8 @@ function resolveExpTree(node){
     return node.value;
   }
 
+  // const left = node.left == null ? 0 : resolveExpTree(node.left);
+  // const right = node.right == null ? 0 : resolveExpTree(node.right);
   const left = resolveExpTree(node.left);
   const right = resolveExpTree(node.right);
 
@@ -33,7 +35,7 @@ function resolveExpTree(node){
     case "key-divide":
       return left / right;
     default:
-      throw new Error('Invalid operator: ' + node.value);
+      throw new Error('Default, invalid operator: ' + node.value);
   }
 }
 
@@ -46,6 +48,7 @@ var workingVal = 0;
 var workingTotal = 0;
 var firstZeroFlag = false;
 var lastKeyEquals = false;
+var resetEntry = false;
 
 // Encapsulates the let stmts below so the values will persist across consecutive
 // calls to handleNumKeys without need of more globals
@@ -68,14 +71,17 @@ function createNumKeysClos(){
   };
 
   function handleNumKeys(id){
-    if(workingVal == 0){
+    if(resetEntry){
       intDigit = 0;
+      decimal = false;
+      decimalDigit = 0;
     }
     if(lastKeyEquals == true){
       workingTotal = 0;
       tree.root = null; // Consider adding clear logic to operation keys so I dont have to expose this
     }
     lastKeyEquals = false;
+    resetEntry = false;
     console.log(id);
     switch(id){
       // Clear display and all working value data.
@@ -102,7 +108,8 @@ function createNumKeysClos(){
       case "key-zero":
         let buttonIn = idValueMaps[id];
         if(decimal){
-          workingVal += buttonIn * Math.pow(10, -1 * (decimalDigit + 1));
+          workingVal += workingVal >= 0 ? buttonIn * Math.pow(10, -1 * (decimalDigit + 1))
+                                        : -1 * buttonIn * Math.pow(10, -1 * (decimalDigit + 1));
           decimalDigit++;
         }
         else{
@@ -153,7 +160,7 @@ function createNumKeysClos(){
 
     // Update display
     // This is intended as temporary, will need to replace
-    document.getElementById('display_box').textContent = workingVal;
+    document.getElementById('display_box').textContent = workingVal.toFixed(decimalDigit);
 
     console.log("workingVal: " + workingVal);
     console.log("intDigit: " + intDigit);
@@ -163,6 +170,7 @@ function createNumKeysClos(){
 }
 
 // TODO: wrap these in a closure
+// TODO: Go through and straighten out refs to currentNode vs tree.root
 console.log(tree);
 var currentNode = null;
 function handleOpKeys(id){
@@ -176,8 +184,15 @@ function handleOpKeys(id){
     // we can return and display the total, resetting the tree.
     // BUG: = = gives result in display "key-equals"
     case "key-equals":
+      // non fatal
+      // BUG: if no operation entered before = pressed then currentNode is null
+      if(currentNode == null){
+
+      }
+
       currentNode.right = new Node(workingVal);
-      workingTotal = resolveExpTree(tree.root);
+      // bug fix for the key-equals popping up in display
+      if(tree.root.value != "key-equals") workingTotal = resolveExpTree(tree.root);
       console.log("Equals: " + workingTotal);
       reset = true;
       tree.root = new Node(id);
@@ -205,6 +220,7 @@ function handleOpKeys(id){
         // if(currentNode.value == "key-plus" || currentNode.value == "key-minus"){
           currentNode.right = new Node(workingVal);
           console.log(tree.root);
+          // if(tree.root.value !=)
           workingTotal = resolveExpTree(tree.root);
           // Duplicate block, could I move after the else?
           tree.root = new Node(id);
@@ -253,8 +269,11 @@ function handleOpKeys(id){
 
   }
   // Display workingTotal
+  // TODO: Implement something to deal with fp rounding errors, use a library
+  // or potentially make this a sigfig calculator to circumvent the issue entirely
   if(firstZeroFlag)document.getElementById('display_box').textContent = workingTotal;
   firstZeroFlag = true;
+  resetEntry = true;
   workingVal = 0;
 }
 
