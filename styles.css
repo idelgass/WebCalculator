@@ -7,6 +7,15 @@ body {
   display: table;
   margin: 0;
 }
+button{
+  background-color: inherit;
+}
+button:hover{
+  filter: brightness(1.1);
+}
+.numpad > *:not(#numpad__rowspec) > button:hover{
+  background-color: #848484;
+}
 .calculator{
   flex: 1;
   height: 100vh;
@@ -19,7 +28,9 @@ body {
 .display{
   background-color: black;
   color: green;
-  font-size: 32px;
+  font-family: "VT323", monospace;
+  font-size: 8vw;
+  padding: 1%;
   display: flex;
   justify-content: right;
   align-items: flex-end;
@@ -48,18 +59,18 @@ body {
   display: flex;
   flex-direction: column;
 }
-.opad__row{
+/* .opad__row{
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.key{
+} */
+/* .key{
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 /* .opad__row0{}
 .opad__row1{}
 .opad__row2{}
