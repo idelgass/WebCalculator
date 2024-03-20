@@ -282,11 +282,17 @@ numKeys.forEach((button) => {
   button.addEventListener("click", () => {
     handleNumKeysClosed(button.name)
   });
+  button.addEventListener("touchstart", () => {
+    handleNumKeysClosed(button.name)
+  });
 });
 
 const opKeys = document.querySelectorAll(".opad > button");
 opKeys.forEach((button) => {
   button.addEventListener("click", () =>{
+    handleOpKeys(button.name);
+  });
+  button.addEventListener("touchstart", () =>{
     handleOpKeys(button.name);
   });
 });
