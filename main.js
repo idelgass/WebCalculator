@@ -106,6 +106,10 @@ function createNumKeysClos(){
       case "key-eight":
       case "key-nine":
       case "key-zero":
+        if(decimalDigit + intDigit > 28){
+          alert("Character limit reached for this entry");
+          return;
+        }
         let buttonIn = idValueMaps[id];
         if(decimal){
           workingVal += workingVal >= 0 ? buttonIn * Math.pow(10, -1 * (decimalDigit + 1))
