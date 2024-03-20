@@ -276,17 +276,17 @@ function handleOpKeys(id){
   workingVal = 0;
 }
 
-const numKeys = document.querySelectorAll(".numpad > * > .key > button");
+const numKeys = document.querySelectorAll(".numpad > .numpad__row > button");
 const handleNumKeysClosed = createNumKeysClos();
 numKeys.forEach((button) => {
   button.addEventListener("click", () => {
-    handleNumKeysClosed(button.parentNode.id)
+    handleNumKeysClosed(button.name)
   });
 });
 
-const opKeys = document.querySelectorAll(".opad > * > .key > button");
+const opKeys = document.querySelectorAll(".opad > button");
 opKeys.forEach((button) => {
   button.addEventListener("click", () =>{
-    handleOpKeys(button.parentNode.id);
+    handleOpKeys(button.name);
   });
 });
