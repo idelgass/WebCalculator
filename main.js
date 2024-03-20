@@ -276,23 +276,33 @@ function handleOpKeys(id){
   workingVal = 0;
 }
 
+var isTouchDevice = 'ontouchstart' in document.documentElement;
+
 const numKeys = document.querySelectorAll(".numpad > .numpad__row > button");
 const handleNumKeysClosed = createNumKeysClos();
 numKeys.forEach((button) => {
-  button.addEventListener("click", () => {
-    handleNumKeysClosed(button.name)
-  });
-  button.addEventListener("touchstart", () => {
-    handleNumKeysClosed(button.name)
-  });
+  if(isTouchDevice){
+    button.addEventListener("touchstart", () => {
+      handleNumKeysClosed(button.name)
+    });
+  }
+  else{
+    button.addEventListener("click", () => {
+      handleNumKeysClosed(button.name)
+    });
+  }
 });
 
 const opKeys = document.querySelectorAll(".opad > button");
 opKeys.forEach((button) => {
-  button.addEventListener("click", () =>{
-    handleOpKeys(button.name);
-  });
-  button.addEventListener("touchstart", () =>{
-    handleOpKeys(button.name);
-  });
+  if(isTouchDevice){
+    button.addEventListener("touchstart", () =>{
+      handleOpKeys(button.name);
+    });
+  }
+  else{
+    button.addEventListener("click", () =>{
+      handleOpKeys(button.name);
+    });
+  }
 });
