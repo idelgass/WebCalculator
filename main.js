@@ -283,6 +283,7 @@ const handleNumKeysClosed = createNumKeysClos();
 numKeys.forEach((button) => {
   if(isTouchDevice){
     button.addEventListener("touchstart", () => {
+      event.preventDefault();
       handleNumKeysClosed(button.name)
     });
   }
@@ -297,6 +298,7 @@ const opKeys = document.querySelectorAll(".opad > button");
 opKeys.forEach((button) => {
   if(isTouchDevice){
     button.addEventListener("touchstart", () =>{
+      event.preventDefault();
       handleOpKeys(button.name);
     });
   }
