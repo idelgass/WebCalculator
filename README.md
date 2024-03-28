@@ -1,2 +1,2 @@
 # WebCalculator
-A simple calculator web app
+A simple calculator I wrote in raw JS, HTML, and CSS. The intended purpose was to keep my JS skills in practice as I do the majority of my leetcode problems in a strongly object oriented language like Java, or a lower level language like C. I worked on this project during my free time between shifts at work and on weekends. I intend to return to this project and add further features at some point. There are still a few things I'd like to clean up in the code base involving my handling of the operation tree, moving certain "classes" into their own modules, etc. but these will have to wait until my other work is finished.
